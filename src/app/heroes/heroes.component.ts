@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Hero } from '../model/hero';
+import { HeroService } from '../hero.service';
 
 // shift+alt+F
 @Component({
@@ -9,13 +10,25 @@ import { Hero } from '../model/hero';
 })
 export class HeroesComponent implements OnInit {
 
-  hero: Hero = {
-    id: 1,
-    name: 'Batman'
-  };
+  heroes: Hero[];
 
-  constructor() { }
+  selectedHero: Hero;
 
-  ngOnInit() { }
+  constructor(private heroService: HeroService) {}
 
+  ngOnInit() {
+    this.getHeroes();
+  }
+
+  onSelect(hero: Hero): void {
+    if (this.selectedHero === hero) {
+      this.selectedHero = null;
+    } else {
+      this.selectedHero = hero;
+    }
+  }
+
+  getHeroes(): void {
+    this.heroService.getHeroes().subscribe(heroes => this.heroes = heroes);
+  }
 }
